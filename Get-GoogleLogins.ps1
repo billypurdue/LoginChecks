@@ -1,5 +1,5 @@
-﻿./getjwt.ps1
-./ipinfotoken.ps1
+. ﻿./getjwt.ps1
+. ./ipinfotoken.ps1
 
 $startTime = (Get-Date).ToUniversalTime().AddDays(-7).ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'")
 

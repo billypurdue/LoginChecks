@@ -1,5 +1,5 @@
 ﻿#install-module microsoft.graph
-./ipinfotoken.ps1
+. ./ipinfotoken.ps1
 Connect-MgGraph -Scopes "AuditLog.Read.All"
 $startDate = (Get-Date).AddDays(-4).ToString("yyyy-MM-ddTHH:mm:ssZ")
 $signIns = Get-MgAuditLogSignIn -Filter "createdDateTime ge $startDate" -All
