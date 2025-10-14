@@ -58,6 +58,4 @@ $jwt = "ey....YOUR_JWT_HERE..._9w"
 2.  Open PowerShell and navigate to the project directory.
 3.  Adjust the days in $startdate if you want to.
 
-```
-
 The script will process the data and create a CSV file.
