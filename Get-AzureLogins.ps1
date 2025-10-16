@@ -38,7 +38,7 @@ $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 
 $orgname = get-mgorganization | select DisplayName
 
-$filename = $orgname.DisplayName + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
+$filename = "~/Documents/" + $orgname.DisplayName + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
 
 $nonIndiana | Export-Csv $filename -NoTypeInformation
 

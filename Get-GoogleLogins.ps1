@@ -1,4 +1,4 @@
-. ﻿./getjwt.ps1
+. ./getjwt.ps1
 . ./ipinfotoken.ps1
 
 $startTime = (Get-Date).ToUniversalTime().AddDays(-7).ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'")
@@ -58,6 +58,6 @@ $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 
 $orgname = "GoogleWorkspace"
 
-$filename = $orgname + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
+$filename = "~/Documents/" + $orgname + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
 
 $nonIndiana | Export-Csv $filename -NoTypeInformation
