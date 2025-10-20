@@ -3,3 +3,5 @@ getjwt.ps1
 **/getjwt.ps1
 ipinfotoken.ps1
 **/ipinfotoken.ps1
+secret*.ps1
+**/secret*.ps1
