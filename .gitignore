@@ -1,0 +1,5 @@
+# Ignore getjwt.ps1 anywhere in the repository
+getjwt.ps1
+**/getjwt.ps1
+ipinfotoken.ps1
+**/ipinfotoken.ps1
