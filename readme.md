@@ -1,6 +1,6 @@
 # Login-Checks
 
-A collection of simple PowerShell scripts to audit successful logins from Azure and Google Workspace, enrich the data with geolocation info, and filter for activity outside a specific region.
+A collection of simple PowerShell scripts to audit successful logins from Azure and Google Workspace, enrich the data with geolocation info, and filter for activity outside a specific region.  The Azure script defaults to a manual workflow, with options to support automation; the Google script is already more setup for automation because of the way a security token is required for authentication (unlike Azure where we can get prompted to authenticate to the Graph API in the web browser).
 
 These scripts were built for function, not perfection. They get the job done for a specific use case but can be adapted as needed. 🛠️
 
@@ -49,13 +49,64 @@ Create a file named `getjwt.ps1`. Your script to generate the token goes here. F
 
 $jwt = "ey....YOUR_JWT_HERE..._9w"
 ```
+### 3. `secrets.ps1` (optional, for Azure Only)
+
+For fully automated execution of the script you'll need to provide a secrets file containing $clientid, $clientsecret, and $tenantid.
+```powershell
+$clientid = "your-client-id"
+$clientsecret = "your-client-secret"
+$tenantid = "your-tenant-id"
+```
+The default file for this is secrets.ps1, however you can specify an alternative by passing the -secrets flag to the script.
+```powershell
+Get-AzureLogins.ps1 -Automate:$true -secrets mysecret.ps1
+```
+More secure options for secret storage are coming.
 
 ---
 
-## Usage
+## Manual Usage (Azure)
+By default, the script will return the last four days of successful logins, and will prompt you to login to authenticate against the Microsoft Graph API.  You'll need to have AuditLog.Read.All and Organization.Read.All permissions.  To specify a different number of days you can use the -Days flag with the script
+```powershell
+Get-AzureLogins.ps1 -Days 2
+```
+The script will process the data and create a CSV file.
 
-1.  Ensure you have created the two prerequisite files listed above.
-2.  Open PowerShell and navigate to the project directory.
-3.  Adjust the days in $startdate if you want to.
+## Automation
+
+In addition to configuring the secrets file as specified above, you'll also need to create the Enterprise Application in Azure for automating the login audit for Azure logs.  There are plenty of guides on the Internet for setting these up, the important bits are that it will require AuditLog.Read.All and Organization.Read.All.
 
 The script will process the data and create a CSV file.
+
+## Flags
+
+### -Days (optional)
+Specify the number of days to get logs for - the default is 4
+```powershell
+Get-AzureLogins.ps1 -Days 23
+```
+
+### -Automated (optional, Azure Only)
+By default this is set to false, set it to true if you want to use a client secret file for automation.
+```powershell
+Get-AzureLogins.ps1 -Automated:$true
+```
+
+### -CSVLocation (optional)
+Specifies where to save the output file - the default is ~/Documents/" which should deliver the file to the Documents folder in Windows, Linux, and MacOS.
+```powershell
+Get-AzureLogins.ps1 -CSVLocation "c:\users\hodor\csv files\"
+```
+
+### -secrets (optional, Azure Only)
+Specifies an alternative secrets file, which is secrets.ps1 by default; this is handy if you're automating for more than one Azure tenant.  This would require setting Automated to true as well.
+```powershell
+Get-AzureLogins.ps1 -Automated:$true -secrets HodorsHealth.ps1
+```
+
+### - status (optional)
+What login types do you want to see - default is successful.  Options are failed, all, or successful.
+```powershell
+Get-AzureLogins.ps1 -status all
+```
+

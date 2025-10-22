@@ -1,11 +1,19 @@
+param(
+    [int]$Days = 4,
+    [string]$CSVLocation = "~/Documents/",
+    [string]$status = "successful"
+)
+
 . ./getjwt.ps1
 . ./ipinfotoken.ps1
 
-$startTime = (Get-Date).ToUniversalTime().AddDays(-7).ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'")
+$startTime = (Get-Date).ToUniversalTime().AddDays(-$Days).ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'")
 
 $baseUri = "https://admin.googleapis.com/admin/reports/v1/activity/users/all/applications/login"
 
-$uri = "$baseUri`?startTime=$startTime&eventName=login_success"
+if ($status -eq "failed"){$uri = "$baseUri`?startTime=$startTime&eventName=login_failure"}
+elseif ($status -eq "all"){$uri = "$baseUri`?startTime=$startTime"}
+else {$uri = "$baseUri`?startTime=$startTime&eventName=login_success"}
 
 $headers = @{
     "Authorization" = "Bearer $jwt"
@@ -21,10 +29,11 @@ $response = Invoke-RestMethod -Uri $uri -Method Get -Headers $headers
             User      = $item.actor.email
             Timestamp = Get-Date $item.id.time
             IPAddress = $item.ipAddress
+            Event = $item.events.name
         }
     }
 
-    $loginData | Format-Table -AutoSize
+    #$loginData | Format-Table -AutoSize
 
 $uniqueIPs = $loginData.IPAddress | Sort-Object -Unique
 
@@ -44,6 +53,7 @@ $enriched = $loginData | ForEach-Object {
     [PSCustomObject]@{
         User   = $_.User
         Date   = $_.Timestamp
+        Event = $_.Event
         IP     = $_.IPAddress
         City   = $geo.city
         State  = $geo.region
@@ -58,6 +68,6 @@ $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 
 $orgname = "GoogleWorkspace"
 
-$filename = "~/Documents/" + $orgname + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
+$filename = $CSVLocation + $orgname + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
 
 $nonIndiana | Export-Csv $filename -NoTypeInformation
