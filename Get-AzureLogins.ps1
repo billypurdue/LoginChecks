@@ -66,7 +66,7 @@ $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 
 $orgname = get-mgorganization | select DisplayName
 
-$filename = $CSVLocation + $orgname.DisplayName + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
+$filename = $CSVLocation + $orgname.DisplayName + "_" + $status + "NonIndianaLogins_" + $timestamp + ".csv"
 
 $nonIndiana | Export-Csv $filename -NoTypeInformation
 

@@ -68,6 +68,6 @@ $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 
 $orgname = "GoogleWorkspace"
 
-$filename = $CSVLocation + $orgname + "_SuccessfulNonIndianaLogins_" + $timestamp + ".csv"
+$filename = $CSVLocation + $orgname + "_" + $status + "NonIndianaLogins_" + $timestamp + ".csv"
 
 $nonIndiana | Export-Csv $filename -NoTypeInformation
