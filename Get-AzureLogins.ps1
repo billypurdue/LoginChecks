@@ -1,6 +1,7 @@
 ﻿param(
     [int]$Days = 4,
     [bool]$Automated = $false,
+    [bool]$Autoopen = $false,
     [string]$CSVLocation = "~/Documents/",
     [string]$secrets = "secrets.ps1",
     [string]$status = "successful"
@@ -71,3 +72,5 @@ $filename = $CSVLocation + $orgname.DisplayName + "_" + $status + "NonIndianaLog
 $nonIndiana | Export-Csv $filename -NoTypeInformation
 
 Disconnect-MgGraph
+
+if ($Autoopen) {invoke-item $filename}

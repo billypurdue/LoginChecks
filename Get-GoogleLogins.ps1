@@ -1,5 +1,6 @@
 param(
     [int]$Days = 4,
+    [bool]$Autoopen = $false,
     [string]$CSVLocation = "~/Documents/",
     [string]$status = "successful"
 )
@@ -71,3 +72,5 @@ $orgname = "GoogleWorkspace"
 $filename = $CSVLocation + $orgname + "_" + $status + "NonIndianaLogins_" + $timestamp + ".csv"
 
 $nonIndiana | Export-Csv $filename -NoTypeInformation
+
+if ($Autoopen) {invoke-item $filename}
